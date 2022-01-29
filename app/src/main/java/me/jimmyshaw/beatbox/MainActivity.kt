@@ -11,8 +11,15 @@ import me.jimmyshaw.beatbox.databinding.ActivityMainBinding
 import me.jimmyshaw.beatbox.databinding.ListItemSoundBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var beatBox: BeatBox
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // (7)
+        beatBox = BeatBox(assets)
+        beatBox.loadSounds()
 
         // (1) Data binding library auto-generates ActivityMainBinding, which holds on
         // to the view hierarchy in the root property. The binding also holds on
