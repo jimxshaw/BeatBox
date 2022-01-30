@@ -2,6 +2,17 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <!--
+        (15) This defines a property named viewModel on the binding class,
+        including a getter and setter. Within the binding class, viewModel
+        can be used in binding expressions.
+        -->
+        <variable
+                name="viewModel"
+                type="me.jimmyshaw.beatbox.SoundViewModel" />
+    </data>
+
     <Button
             android:layout_width="match_parent"
             android:layout_height="120dp"
