@@ -12,15 +12,39 @@ private const val SOUNDS_FOLDER = "sample_sounds"
 // AssetManager will be wired to the same set of assets.
 class BeatBox(private val assets: AssetManager) {
 
+    val sounds: List<Sound>
+
+    init {
+        sounds = loadSounds()
+    }
+
     // (6)
-    fun loadSounds(): List<String> {
-        return try {
-            val soundNames = assets.list(SOUNDS_FOLDER)!!
-            Log.d(TAG, "Found ${soundNames.size} sounds")
-            soundNames.asList()
+    // (13) Make method private as it's no longer being called
+    // outside of the init block.
+    private fun loadSounds(): List<Sound> {
+        val soundNames: Array<String>
+
+        try {
+            // (9) The assignment will only succeed if the
+            // assets list is NOT null. NullPointerException
+            // will be thrown otherwise.
+            soundNames = assets.list(SOUNDS_FOLDER)!!
         } catch (e: Exception) {
-            Log.e(TAG, "Could not list assets", e)
-            emptyList()
+            Log.e(TAG, "Cound not list assets", e)
+
+            return emptyList()
         }
+
+        val sounds = mutableListOf<Sound>()
+
+        // (10)
+        soundNames.forEach { filename ->
+            val assetPath = "$SOUNDS_FOLDER/$filename"
+            val sound = Sound(assetPath)
+
+            sounds.add(sound)
+        }
+
+        return sounds
     }
 }
