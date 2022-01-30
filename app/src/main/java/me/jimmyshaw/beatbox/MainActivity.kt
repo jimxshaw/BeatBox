@@ -69,7 +69,11 @@ class MainActivity : AppCompatActivity() {
             return SoundHolder(binding)
         }
 
-        override fun onBindViewHolder(holder: SoundHolder, position: Int) {}
+        // (17) Bind the adapter with the view holder, of which is bound to the view model.
+        override fun onBindViewHolder(holder: SoundHolder, position: Int) {
+            val sound = sounds[position]
+            holder.bind(sound)
+        }
 
         // (11B) Assign the actual size to the item count.
         override fun getItemCount(): Int = sounds.size
