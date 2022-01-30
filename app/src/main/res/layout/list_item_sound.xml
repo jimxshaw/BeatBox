@@ -6,7 +6,8 @@
         <!--
         (15) This defines a property named viewModel on the binding class,
         including a getter and setter. Within the binding class, viewModel
-        can be used in binding expressions.
+        can be used in binding expressions. Values from a view model can be
+        used in a layout file with binding mustache operator @{}.
         -->
         <variable
                 name="viewModel"
@@ -16,6 +17,7 @@
     <Button
             android:layout_width="match_parent"
             android:layout_height="120dp"
+            android:text="@{viewModel.title}"
             tools:text="Sound name" />
 
 </layout>
