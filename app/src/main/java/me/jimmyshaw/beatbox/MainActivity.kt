@@ -19,7 +19,6 @@ class MainActivity : AppCompatActivity() {
 
         // (7)
         beatBox = BeatBox(assets)
-        beatBox.loadSounds()
 
         // (1) Data binding library auto-generates ActivityMainBinding, which holds on
         // to the view hierarchy in the root property. The binding also holds on
@@ -30,7 +29,8 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.apply {
             layoutManager = GridLayoutManager(context, 3)
             // (4)
-            adapter = SoundAdapter()
+            // (12) Pass actual list of sounds to adapter.
+            adapter = SoundAdapter(beatBox.sounds)
         }
     }
 
@@ -41,7 +41,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     // (3)
-    private inner class SoundAdapter() : RecyclerView.Adapter<SoundHolder>() {
+    // (11A) Wire up list of sound with this adapter.
+    private inner class SoundAdapter(private val sounds: List<Sound>) : RecyclerView.Adapter<SoundHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SoundHolder {
             val binding = DataBindingUtil.inflate<ListItemSoundBinding>(
                 layoutInflater, R.layout.list_item_sound, parent, false
@@ -51,7 +52,8 @@ class MainActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: SoundHolder, position: Int) {}
 
-        override fun getItemCount(): Int = 0
+        // (11B) Assign the actual size to the item count.
+        override fun getItemCount(): Int = sounds.size
 
     }
 }

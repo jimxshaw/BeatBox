@@ -19,7 +19,9 @@ class BeatBox(private val assets: AssetManager) {
     }
 
     // (6)
-    fun loadSounds(): List<Sound> {
+    // (13) Make method private as it's no longer being called
+    // outside of the init block.
+    private fun loadSounds(): List<Sound> {
         val soundNames: Array<String>
 
         try {
