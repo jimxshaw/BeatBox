@@ -38,6 +38,25 @@ class MainActivity : AppCompatActivity() {
     private inner class SoundHolder(private val binding: ListItemSoundBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        // (16A) Create a view model object and attach it to its binding class.
+        init {
+            binding.viewModel = SoundViewModel()
+        }
+
+        // (16B) This bind function updates the data that the view model
+        // is working with.
+        fun bind(sound: Sound) {
+            binding.apply {
+                viewModel?.sound = sound
+                // Call this isn't normally necessary but here data is updating
+                // inside a recycler view, which updates at a high speed. Calling
+                // this forces the layout to immediately update itself, rather than
+                // wait a millisecond or two. This keeps the recycler view in sync
+                // with its adapter.
+                executePendingBindings()
+            }
+        }
+
     }
 
     // (3)
@@ -50,7 +69,11 @@ class MainActivity : AppCompatActivity() {
             return SoundHolder(binding)
         }
 
-        override fun onBindViewHolder(holder: SoundHolder, position: Int) {}
+        // (17) Bind the adapter with the view holder, of which is bound to the view model.
+        override fun onBindViewHolder(holder: SoundHolder, position: Int) {
+            val sound = sounds[position]
+            holder.bind(sound)
+        }
 
         // (11B) Assign the actual size to the item count.
         override fun getItemCount(): Int = sounds.size
