@@ -1,5 +1,6 @@
 package me.jimmyshaw.beatbox
 
+import android.content.res.AssetFileDescriptor
 import android.content.res.AssetManager
 import android.media.SoundPool
 import android.util.Log
@@ -21,8 +22,16 @@ class BeatBox(private val assets: AssetManager) {
     // (19B) SoundPool can load many sounds in to memory and can control
     // max number of sounds that can play at any time.
     private val soundPool = SoundPool.Builder()
-                                     .setMaxStreams(MAX_SOUNDS)
-                                     .build()
+        .setMaxStreams(MAX_SOUNDS)
+        .build()
+
+    // (21) The SoundPool plays sounds right away but must load
+    // sounds first, hence the id labeling each loaded sound.
+    private fun load(sound: Sound) {
+        val assetFileDescriptor: AssetFileDescriptor = assets.openFd(sound.assetPath)
+        val soundId = soundPool.load(assetFileDescriptor, 1)
+        sound.soundId = soundId
+    }
 
 
     init {
