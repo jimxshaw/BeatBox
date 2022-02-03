@@ -1,10 +1,14 @@
 package me.jimmyshaw.beatbox
 
 import android.content.res.AssetManager
+import android.media.SoundPool
 import android.util.Log
 
 private const val TAG = "BeatBox"
 private const val SOUNDS_FOLDER = "sample_sounds"
+
+// (19A) How many sounds can play at any given time.
+private const val MAX_SOUNDS = 5
 
 // (5) Assets are accessed from AssetManager.
 // AssetManager can be gotten from any context.
@@ -13,6 +17,13 @@ private const val SOUNDS_FOLDER = "sample_sounds"
 class BeatBox(private val assets: AssetManager) {
 
     val sounds: List<Sound>
+
+    // (19B) SoundPool can load many sounds in to memory and can control
+    // max number of sounds that can play at any time.
+    private val soundPool = SoundPool.Builder()
+                                     .setMaxStreams(MAX_SOUNDS)
+                                     .build()
+
 
     init {
         sounds = loadSounds()
