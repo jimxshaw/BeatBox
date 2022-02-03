@@ -10,7 +10,7 @@ import androidx.databinding.Bindable
 
 // (18A) Make the view model communicate with the layout file
 // by implementing the Observable interface.
-class SoundViewMode : BaseObservable() {
+class SoundViewModel : BaseObservable() {
 
     var sound: Sound? = null
         set(sound) {
