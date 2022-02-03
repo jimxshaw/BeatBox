@@ -30,6 +30,13 @@ class BeatBox(private val assets: AssetManager) {
         sounds = loadSounds()
     }
 
+    // (23)
+    fun play(sound: Sound) {
+        sound.soundId?.let {
+            id -> soundPool.play(id, 1.0f, 1.0f, 1, 0, 1.0f)
+        }
+    }
+
     // (21) The SoundPool plays sounds right away but must load
     // sounds first, hence the id labeling each loaded sound.
     private fun load(sound: Sound) {
