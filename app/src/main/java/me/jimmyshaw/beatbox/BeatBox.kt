@@ -1,10 +1,16 @@
 package me.jimmyshaw.beatbox
 
+import android.content.res.AssetFileDescriptor
 import android.content.res.AssetManager
+import android.media.SoundPool
 import android.util.Log
+import java.io.IOException
 
 private const val TAG = "BeatBox"
 private const val SOUNDS_FOLDER = "sample_sounds"
+
+// (19A) How many sounds can play at any given time.
+private const val MAX_SOUNDS = 5
 
 // (5) Assets are accessed from AssetManager.
 // AssetManager can be gotten from any context.
@@ -14,8 +20,29 @@ class BeatBox(private val assets: AssetManager) {
 
     val sounds: List<Sound>
 
+    // (19B) SoundPool can load many sounds in to memory and can control
+    // max number of sounds that can play at any time.
+    private val soundPool = SoundPool.Builder()
+        .setMaxStreams(MAX_SOUNDS)
+        .build()
+
     init {
         sounds = loadSounds()
+    }
+
+    // (23)
+    fun play(sound: Sound) {
+        sound.soundId?.let {
+            id -> soundPool.play(id, 1.0f, 1.0f, 1, 0, 1.0f)
+        }
+    }
+
+    // (21) The SoundPool plays sounds right away but must load
+    // sounds first, hence the id labeling each loaded sound.
+    private fun load(sound: Sound) {
+        val assetFileDescriptor: AssetFileDescriptor = assets.openFd(sound.assetPath)
+        val soundId = soundPool.load(assetFileDescriptor, 1)
+        sound.soundId = soundId
     }
 
     // (6)
@@ -42,7 +69,13 @@ class BeatBox(private val assets: AssetManager) {
             val assetPath = "$SOUNDS_FOLDER/$filename"
             val sound = Sound(assetPath)
 
-            sounds.add(sound)
+            // (22) Load sound into the SoundPool.
+            try {
+                load(sound)
+                sounds.add(sound)
+            } catch (e: IOException) {
+                Log.e(TAG, "Could not load sound $filename", e)
+            }
         }
 
         return sounds
